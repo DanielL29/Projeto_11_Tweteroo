@@ -24,4 +24,10 @@ app.post('/tweets', (req, res) => {
     res.send('OK')
 })
 
+app.get('/tweets', (req, res) => {
+    const tenTweets = tweets.sort((a, b) => b.tweetId - a.tweetId).filter((tweet, i) => i < 10)
+
+    res.send(tenTweets)
+})
+
 app.listen(PORT, () => console.log(`Servidor executando na porta ${PORT}`))
