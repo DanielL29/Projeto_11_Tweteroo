@@ -35,3 +35,13 @@ export function verifyURL(avatar) {
 
     return false
 }
+
+export function validatePage(page, limit, length) {
+    const maxPage = Math.ceil(length / limit)
+
+    if(length > 0 && page > maxPage) {
+        return true
+    }
+
+    return false
+}

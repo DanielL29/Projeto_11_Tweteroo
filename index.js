@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from 'cors'
 import { users, tweets } from './db.js'
-import { isEmpty, validateObj, verifyURL } from './validations.js'
+import { isEmpty, validateObj, verifyURL, validatePage } from './validations.js'
 
 const app = express()
 const PORT = 5000
@@ -9,8 +9,8 @@ const PORT = 5000
 app.use(cors())
 app.use(express.json())
 
-let userId = 1
-let tweetId = 1
+let userId, tweetId = 1
+let limit = 10
 
 app.post('/sign-up', (req, res) => {
     if(isEmpty({...req.body}) || !validateObj({...req.body}, 'user')) {
@@ -50,11 +50,17 @@ app.post('/tweets', (req, res) => {
 })
 
 app.get('/tweets', (req, res) => {
+    const page = req.query.page
+
     if(isEmpty({...req.body})) res.sendStatus(400)
-
-    const tenTweets = tweets.sort((a, b) => b.id - a.id).filter((_, i) => i < 10)
-
-    res.send(tenTweets)
+    else {     
+        if(validatePage(page, limit, tweets.length)) {
+            res.status(400).send('Informe uma página válida!')
+        }
+        const tenTweets = tweets.filter((_, i) => i >= (page * limit - 10) && i < limit * page)
+        
+        res.send(tenTweets)
+    }
 })
 
 app.get('/tweets/:username', (req, res) => {
