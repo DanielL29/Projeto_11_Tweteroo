@@ -57,4 +57,11 @@ app.get('/tweets', (req, res) => {
     res.send(tenTweets)
 })
 
+app.get('/tweets/:username', (req, res) => {
+    const username = req.params.username
+    const userPosts = tweets.filter(tweet => tweet.username === username)
+
+    res.send(userPosts)
+})
+
 app.listen(PORT, () => console.log(`Servidor executando na porta ${PORT}`))
