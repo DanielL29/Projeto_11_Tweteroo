@@ -37,7 +37,7 @@ app.post('/tweets', (req, res) => {
             res.status(401).send('Faltando o headers do nome do usuário!')
         }
     
-        tweets.push({
+        tweets.unshift({
             id: tweetId, 
             username: req.headers.user, 
             ...req.body, 
@@ -58,7 +58,7 @@ app.get('/tweets', (req, res) => {
             res.status(400).send('Informe uma página válida!')
         }
         const tenTweets = tweets.filter((_, i) => i >= (page * limit - 10) && i < limit * page)
-        
+
         res.send(tenTweets)
     }
 })
